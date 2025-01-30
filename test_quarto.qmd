@@ -67,7 +67,7 @@ if (!require(yaml)) {
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     library(BiocManager)
-install.packages("pheatmap")
+
 install_packages <- function(file = "packages.yml") {
   # Read the YAML file
   packages <- yaml::read_yaml(file)
