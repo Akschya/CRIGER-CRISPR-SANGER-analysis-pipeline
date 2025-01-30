@@ -49,7 +49,7 @@ BiocManager::install("sangerseqR")
 
 # Sequence Metrics
 
-```{r load libraries, include=FALSE}
+```{r load libraries}
 # Load necessary libraries
 .libPaths()
 
