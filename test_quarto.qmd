@@ -29,6 +29,15 @@ params:
   batch_file: !r "Sys.getenv('BATCH_INPUT_FILE')"
 ---
 
+```{r, include=FALSE}
+### Env variable setup ###
+# Set environment variables dynamically in the R chunk
+output_dir <- Sys.getenv("OUTPUT_DIR")
+input_ab1 <- Sys.getenv("INPUT_AB1")
+analysis_type <- Sys.getenv("ANALYSIS_TYPE")
+batch_file <- Sys.getenv("BATCH_INPUT_FILE")
+```
+
 ```{css classDummyTable, echo=FALSE}
 .dummyTable .table thead {
     visibility: collapse;
