@@ -53,6 +53,7 @@ output_path_results <-  paste0(output_dir, "Outputs/Results")
 #| label: R environment setup
 
 #### R ENV SETUP ####
+options(warn = -1)  # Suppress warnings
 options(repos = c(
   binary = "https://packagemanager.rstudio.com/all/__linux__/focal/latest",
   source = "https://packagemanager.rstudio.com/all/latest",
@@ -63,11 +64,11 @@ options(repos = c(
 
 # Load the yaml package to read YAML files
 if (!require(yaml)) {
-  install.packages("yaml")
+  suppressWarnings(install.packages("yaml"))
   library(yaml)
 }
 if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+    suppressWarnings(install.packages("BiocManager"))
     library(BiocManager)
 
 install_packages <- function(file = "packages.yml") {
@@ -87,7 +88,7 @@ install_packages <- function(file = "packages.yml") {
   if (!is.null(base_pkgs) && length(base_pkgs) > 0) {
     for (pkg in base_pkgs) {
       if (!requireNamespace(pkg, quietly = TRUE)) {
-        install.packages(pkg)
+        suppressWarnings(install.packages(pkg))
       }
     }
   }
@@ -97,7 +98,7 @@ install_packages <- function(file = "packages.yml") {
     bioc_pkgs <- BiocManager::available()
     for (pkg in bioconductor_pkgs) {
       if (pkg %in% bioc_pkgs && !requireNamespace(pkg, quietly = TRUE)) {
-        BiocManager::install(pkg, ask = FALSE)
+        suppressWarnings(BiocManager::install(pkg, ask = FALSE))
       }
     }
   }
@@ -108,18 +109,20 @@ install_packages()
 
 # Sequence Metrics
 
-```{r load libraries, include=FALSE}
+```{r, include=FALSE}
+#| label: Load libraries
+
 # Load necessary libraries
-library(sangerseqR)
-library(pheatmap)
-library(ggplot2)
-library(reshape2)
-library(plotly)
-library(Biostrings)
-library(kableExtra)
-library(DT)
-library(reactable)
-library(writexl)
+suppressPackageStartupMessages(library(sangerseqR))
+suppressPackageStartupMessages(library(pheatmap))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(plotly))
+suppressPackageStartupMessages(library(Biostrings))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(DT))
+suppressPackageStartupMessages(library(reactable))
+suppressPackageStartupMessages(library(writexl))
 
 ```
 
