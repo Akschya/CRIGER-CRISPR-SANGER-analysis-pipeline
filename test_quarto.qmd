@@ -51,10 +51,6 @@ batch_file <- Sys.getenv("BATCH_INPUT_FILE")
 #| label: R environment setup
 
 #### R ENV SETUP ####
-# Set a default CRAN mirror
-options(warn = 1)  # Show warnings temporarily for debugging
-options(Ncpus = 1)  # Use a single CPU to avoid multithreading messages
-
 options(repos = c(
   binary = "https://packagemanager.rstudio.com/all/__linux__/focal/latest",
   source = "https://packagemanager.rstudio.com/all/latest",
@@ -82,7 +78,7 @@ install_packages <- function(file = "packages.yml") {
 
   # Loop through each package and install it
   for (pkg in packages) {
-    if (any(pkg %in% bioc_pkgs)) {  # Use 'any()' to ensure a single TRUE/FALSE
+    if (any(pkg %in% bioc_pkgs)) 
       BiocManager::install(pkg, ask = FALSE)  # Install Bioconductor package
     } else {
       install.packages(pkg)  # Install CRAN or other packages
