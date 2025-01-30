@@ -29,6 +29,8 @@ output_dir <- Sys.getenv("OUTPUT_DIR")
 input_ab1 <- Sys.getenv("INPUT_AB1")
 analysis_type <- Sys.getenv("ANALYSIS_TYPE")
 batch_file <- Sys.getenv("BATCH_INPUT_FILE")
+output_path_plots <- paste0(output_dir, "Outputs/Plots")
+output_path_results <-  paste0(output_dir, "Outputs/Results")
 ```
 
 ```{css classDummyTable, echo=FALSE}
@@ -194,9 +196,12 @@ intensity_df <- as.data.frame(intensity_matrix)
 colnames(intensity_df)[1] <- "Base"
 # Add the row values "A", "T", "G", "C" to the first column
 intensity_df$Base <- c("A", "C", "G", "T")
-# Save the summary table as excel
-write_xlsx(intensity_df, "intensity_matrix.xlsx")
 
+# Save the summary table as excel
+# Define the file path
+output_file <- file.path(output_path_results, "intensity_matrix.xlsx")
+# Save the dataframe
+write_xlsx(intensity_df, output_file)
 ```
 
 ```{r tblMtcarsCaption, echo=FALSE}
@@ -246,7 +251,8 @@ reactable(
 )
 
 # Save the summary table as excel
-write_xlsx(summary_table, "summary_table.xlsx")
+output_file <- file.path(output_path_results, "summary_table.xlsx")
+write_xlsx(summary_table, output_file)
 ```
 ```{r tblMtcarsCaption, echo=FALSE}
 #| label: tbl-Mtcars-2
@@ -266,7 +272,7 @@ mtcars[1,] |> knitr::kable()   # Dummy table is completely hidden from report
 #| fig-cap-location: bottom
 
 # Set the output image path
-img_path <- "chromatogram.png"
+img_path <- file.path(output_path_plots, "chromatogram.png")
 wdt <- length(int@primarySeq)*25
 par(mar = c(0, 0, 0, 0), xpd = NA) 
 
@@ -323,8 +329,9 @@ interactive_heatmap <- plot_ly(
 interactive_heatmap
 
 
-# Save the interactive bar plot as HTML
-htmlwidgets::saveWidget(interactive_heatmap, "interactive_heatmap.html")
+# Save the interactive heatmap as HTML
+output_plot <- file.path(output_path_plots, "heatmap.html")
+htmlwidgets::saveWidget(interactive_heatmap, output_plot)
 
 # Log transform intensity data for better visualization
 heatmap_data$LogIntensity <- log10(heatmap_data$Intensity + 1)
@@ -379,7 +386,8 @@ interactive_bar_plot <- ggplotly(ggplot_bar_plot) %>%
 interactive_bar_plot 
 
 # Save the interactive bar plot as HTML
-htmlwidgets::saveWidget(interactive_bar_plot, "interactive_bar_plot.html")
+output_plot <- file.path(output_path_plots, "stacked_bar_plot.html")
+htmlwidgets::saveWidget(interactive_bar_plot, output_plot)
 
 ```
 ```{=html}
@@ -432,7 +440,8 @@ interactive_line_plot <- plot_ly(
 interactive_line_plot
 
 # Save as an interactive HTML file
-htmlwidgets::saveWidget(interactive_line_plot, "interactive_line_plot.html")
+output_plot <- file.path(output_path_plots, "line_plot.html")
+htmlwidgets::saveWidget(interactive_line_plot, output_plot)
 
 ```
 ```{=html}
