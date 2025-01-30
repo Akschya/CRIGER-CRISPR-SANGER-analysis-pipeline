@@ -77,20 +77,13 @@ install_packages <- function(file = "packages.yml") {
   
   # Loop through each package and install it
   for (pkg in packages) {
-    tryCatch(
       {
         if (any(pkg %in% bioc_pkgs)) {
-          message("Installing Bioconductor package: ", pkg)
           BiocManager::install(pkg, ask = FALSE)
         } else {
-          message("Installing CRAN package: ", pkg)
           install.packages(pkg)
         }
-      },
-      error = function(e) {
-        message("Failed to install package: ", pkg, "\nError: ", e$message)
       }
-    )
   }
 }
 
