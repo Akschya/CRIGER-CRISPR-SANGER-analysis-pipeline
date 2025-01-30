@@ -1,12 +1,14 @@
 packages:
-- sangerseqR
-- pheatmap
-- ggplot2
-- reshape2
-- plotly
-- Biostrings
-- RCurl
-- kableExtra
-- DT
-- reactable
-- writexl
+  base:
+    - pheatmap
+    - ggplot2
+    - reshape2
+    - plotly
+    - RCurl
+    - kableExtra
+    - DT
+    - reactable
+    - writexl
+  bioconductor:
+    - sangerseqR
+    - Biostrings
