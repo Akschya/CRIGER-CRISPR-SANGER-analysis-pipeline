@@ -75,7 +75,6 @@ if (file.exists("packages.yml")) {
 } else {
   stop("Error: 'packages.yml' file not found!")
 }
-
 ```
 
 # Sequence Metrics
