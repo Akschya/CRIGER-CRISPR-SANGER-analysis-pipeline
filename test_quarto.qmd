@@ -433,39 +433,6 @@ htmlwidgets::saveWidget(interactive_line_plot, "interactive_line_plot.html")
 #   labs(title = "Base Intensities Across Positions", x = "Position", y = "Base") +
 #   theme_minimal()
 ```
-# ICE Analysis Results
-
-```{r, include=FALSE}
-#| label: ICE-Analysis
-
-# Define the directory and files
-directory_path <- "C:/path/to/ice/results"
-single_file <- "sample_analysis.txt"  # Example single file
-batch_directory <- "batch_results"   # Directory for batch files
-
-# Function to read ICE analysis results from a single file
-read_single_file <- function(file_path) {
-  ice_data <- readLines(file_path)
-  return(ice_data)
-}
-
-# Function to read ICE analysis results from multiple batch files
-read_batch_files <- function(directory_path) {
-  file_list <- list.files(directory_path, full.names = TRUE)
-  batch_data <- lapply(file_list, function(file) readLines(file))
-  return(batch_data)
-}
-
-# Check if it's a single file or batch processing
-if (file.exists(file.path(directory_path, single_file))) {
-  # Single file analysis
-  ice_analysis <- read_single_file(file.path(directory_path, single_file))
-} else if (dir.exists(file.path(directory_path, batch_directory))) {
-  # Batch file analysis
-  ice_analysis <- read_batch_files(file.path(directory_path, batch_directory))
-} else {
-  stop("No ICE analysis files found!")
-}
 # Session Info
 
 ```{r, echo=FALSE}
