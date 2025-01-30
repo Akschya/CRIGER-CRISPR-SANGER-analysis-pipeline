@@ -77,13 +77,15 @@ install_packages <- function(file = "packages.yml") {
   # Read the YAML file
   packages <- yaml::read_yaml(file)
   
+  # Get the list of available Bioconductor packages
+  bioc_pkgs <- BiocManager::available()
+
   # Loop through each package and install it
-  for(pkg in packages) {
-    # Check if the package is from Bioconductor
-    if (pkg %in% BiocManager::available()) {
-      BiocManager::install(pkg)
+  for (pkg in packages) {
+    if (any(pkg %in% bioc_pkgs)) {  # Use 'any()' to ensure a single TRUE/FALSE
+      BiocManager::install(pkg, ask = FALSE)  # Install Bioconductor package
     } else {
-      install.packages(pkg)
+      install.packages(pkg)  # Install CRAN or other packages
     }
   }
 }
