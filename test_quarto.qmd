@@ -83,6 +83,9 @@ install_packages <- function(file = "packages.yml") {
 ```{r load libraries}
 # Load necessary libraries
 library(sangerseqR)
+library(dplyr)
+library(ggplot2)
+library(Biostrings)
 
 
 ```
