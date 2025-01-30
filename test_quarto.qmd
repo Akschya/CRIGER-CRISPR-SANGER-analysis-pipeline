@@ -51,7 +51,7 @@ BiocManager::install("sangerseqR")
 
 ```{r load libraries, include=FALSE}
 # Load necessary libraries
-library(sangerseqR)
+.libPaths()
 
 
 ```
