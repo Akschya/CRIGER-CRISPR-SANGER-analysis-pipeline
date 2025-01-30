@@ -68,7 +68,6 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     library(BiocManager)
 
-# Define function to install packages from 'packages.yml'
 install_packages <- function(file = "packages.yml") {
   # Read the YAML file
   packages <- yaml::read_yaml(file)
@@ -78,11 +77,20 @@ install_packages <- function(file = "packages.yml") {
   
   # Loop through each package and install it
   for (pkg in packages) {
-    if (any(pkg %in% bioc_pkgs)) {
-      BiocManager::install(pkg, ask = FALSE)  # Install Bioconductor package
-    } else {
-      install.packages(pkg)  # Install CRAN or other packages
-    }
+    tryCatch(
+      {
+        if (any(pkg %in% bioc_pkgs)) {
+          message("Installing Bioconductor package: ", pkg)
+          BiocManager::install(pkg, ask = FALSE)
+        } else {
+          message("Installing CRAN package: ", pkg)
+          install.packages(pkg)
+        }
+      },
+      error = function(e) {
+        message("Failed to install package: ", pkg, "\nError: ", e$message)
+      }
+    )
   }
 }
 
