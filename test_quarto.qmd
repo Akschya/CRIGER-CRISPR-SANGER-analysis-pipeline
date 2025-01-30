@@ -54,7 +54,11 @@ batch_file <- Sys.getenv("BATCH_INPUT_FILE")
 # Set a default CRAN mirror
 options(warn = 1)  # Show warnings temporarily for debugging
 options(Ncpus = 1)  # Use a single CPU to avoid multithreading messages
-options(repos = c(CRAN = "https://cloud.r-project.org"))
+# Set CRAN mirror to a specific URL (e.g., for USA)
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+# Set Bioconductor mirror to a specific URL
+BiocManager::install(version = "3.17", repos = "https://bioconductor.org/packages/release/bioc")
+
 
 # Load the yaml package to read YAML files
 if (!require(yaml)) {
@@ -69,36 +73,24 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 if (file.exists("packages.yml")) {
   packages_info <- yaml::read_yaml("packages.yml")
   
-  # Install CRAN packages (base packages)
-  if (!is.null(packages_info$base)) {
-    required_base_packages <- packages_info$base
-    for (pkg in required_base_packages) {
-      if (!require(pkg, character.only = TRUE)) {
-        message(paste("Installing CRAN package:", pkg))
-        install.packages(pkg, dependencies = TRUE)
-        library(pkg, character.only = TRUE)
-      }
+  # Define function to install packages from 'packages.yml'
+install_packages <- function(file = "packages.yml") {
+  # Read the YAML file
+  packages <- yaml::read_yaml(file)
+  
+  # Loop through each package and install it
+  for(pkg in packages) {
+    # Check if the package is from Bioconductor
+    if (pkg %in% BiocManager::available()) {
+      BiocManager::install(pkg)
+    } else {
+      install.packages(pkg)
     }
   }
-
-  # Install Bioconductor packages
-  if (!is.null(packages_info$bioconductor)) {
-    required_bioconductor_packages <- packages_info$bioconductor
-    # Ensure BiocManager is available
-    if (!requireNamespace("BiocManager", quietly = TRUE)) {
-      install.packages("BiocManager")
-    }
-    for (pkg in required_bioconductor_packages) {
-      if (!require(pkg, character.only = TRUE)) {
-        message(paste("Installing Bioconductor package:", pkg))
-        BiocManager::install(pkg)
-        library(pkg, character.only = TRUE)
-      }
-    }
-  }
-} else {
-  stop("Error: 'packages.yml' file not found!")
 }
+
+# Install packages from the 'packages.yml' file
+install_packages()
 ```
 
 # Sequence Metrics
