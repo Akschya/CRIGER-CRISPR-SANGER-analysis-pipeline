@@ -21,12 +21,12 @@ format:
       href: https://github.com/Akschya/CRISPR_Analysis 
 editor: visual
 project:
-  execute-dir: !r Sys.getenv("OUTPUT_DIR")
+  execute-dir: !r "Sys.getenv('OUTPUT_DIR')"
 params:
-  input_file: !r Sys.getenv("INPUT_AB1")
-  output_dir: !r Sys.getenv("OUTPUT_DIR")
-  analysis_type: !r Sys.getenv("ANALYSIS_TYPE")
-  batch_file: !r Sys.getenv("BATCH_INPUT_FILE")
+  input_file: !r "Sys.getenv('INPUT_AB1')"
+  output_dir: !r "Sys.getenv('OUTPUT_DIR')"
+  analysis_type: !r "Sys.getenv('ANALYSIS_TYPE')"
+  batch_file: !r "Sys.getenv('BATCH_INPUT_FILE')"
 ---
 
 ```{css classDummyTable, echo=FALSE}
