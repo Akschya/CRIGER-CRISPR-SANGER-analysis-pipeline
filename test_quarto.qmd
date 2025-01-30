@@ -54,10 +54,11 @@ batch_file <- Sys.getenv("BATCH_INPUT_FILE")
 # Set a default CRAN mirror
 options(warn = 1)  # Show warnings temporarily for debugging
 options(Ncpus = 1)  # Use a single CPU to avoid multithreading messages
-# Set CRAN mirror to a specific URL (e.g., for USA)
-options(repos = c(CRAN = "https://cran.rstudio.com"))
-# Set Bioconductor mirror to a specific URL
-BiocManager::install(version = "3.17", repos = "https://bioconductor.org/packages/release/bioc")
+
+# Set CRAN mirror
+chooseCRANmirror(graphics = FALSE, ind = 1)  # You can adjust the index for the desired mirror
+# Set Bioconductor mirror
+BiocManager::chooseBioCmirror(ind = 1)  # Adjust the index for your preferred Bioconductor mirror
 
 
 # Load the yaml package to read YAML files
