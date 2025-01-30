@@ -52,17 +52,17 @@ batch_file <- Sys.getenv("BATCH_INPUT_FILE")
 
 #### R ENV SETUP ####
 # Set a default CRAN mirror
-options(warn = -1)  # Suppress warnings
+options(warn = 1)  # Show warnings temporarily for debugging
 options(Ncpus = 1)  # Use a single CPU to avoid multithreading messages
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 
 # Load the yaml package to read YAML files
 if (!require(yaml)) {
-  suppressWarnings(install.packages("yaml"))
+  install.packages("yaml")
   library(yaml)
 }
 
-# Read the YAML file
+# Check if the 'packages.yml' file exists
 if (file.exists("packages.yml")) {
   packages_info <- yaml::read_yaml("packages.yml")
   
@@ -71,9 +71,9 @@ if (file.exists("packages.yml")) {
     required_base_packages <- packages_info$base
     for (pkg in required_base_packages) {
       if (!require(pkg, character.only = TRUE)) {
-        suppressWarnings(install.packages(pkg, dependencies = TRUE))
+        message(paste("Installing CRAN package:", pkg))
+        install.packages(pkg, dependencies = TRUE)
         library(pkg, character.only = TRUE)
-        print(paste("Installing CRAN package:", pkg))
       }
     }
   }
@@ -81,14 +81,15 @@ if (file.exists("packages.yml")) {
   # Install Bioconductor packages
   if (!is.null(packages_info$bioconductor)) {
     required_bioconductor_packages <- packages_info$bioconductor
+    # Ensure BiocManager is available
     if (!requireNamespace("BiocManager", quietly = TRUE)) {
       install.packages("BiocManager")
     }
     for (pkg in required_bioconductor_packages) {
       if (!require(pkg, character.only = TRUE)) {
+        message(paste("Installing Bioconductor package:", pkg))
         BiocManager::install(pkg)
         library(pkg, character.only = TRUE)
-        print(paste("Installing Bioconductor package:", pkg))
       }
     }
   }
