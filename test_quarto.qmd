@@ -106,7 +106,7 @@ install_packages <- function(file = "packages.yml") {
 
 ```{r load libraries, include=FALSE}
 # Load necessary libraries
-#library(sangerseqR)
+library(sangerseqR)
 library(pheatmap)
 library(ggplot2)
 library(reshape2)
