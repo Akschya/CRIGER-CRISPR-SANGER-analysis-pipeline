@@ -100,7 +100,7 @@ install_packages()
 
 # Sequence Metrics
 
-```{r setup, include=FALSE}
+```{r load libraries, include=FALSE}
 # Load necessary libraries
 library(sangerseqR)
 library(pheatmap)
