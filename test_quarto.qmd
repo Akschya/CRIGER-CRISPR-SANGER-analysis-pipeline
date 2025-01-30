@@ -125,7 +125,7 @@ library(writexl)
 
 #| label: Data Import
 
-data <- read.abif(input_file)
+data <- read.abif(input_ab1)
 #str(data)
 #class(int)
 
