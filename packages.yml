@@ -2,6 +2,13 @@ packages:
   base:
     - dplyr
     - ggplot2
+    - pheatmap
+    - reshape2
+    - plotly
+    - kableExtra
+    - DT
+    - reactable
+    - writexl
   bioconductor:
     - sangerseqR
     - Biostrings
