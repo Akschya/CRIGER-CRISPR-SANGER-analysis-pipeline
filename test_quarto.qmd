@@ -69,11 +69,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     library(BiocManager)
 
-# Check if the 'packages.yml' file exists
-if (file.exists("packages.yml")) {
-  packages_info <- yaml::read_yaml("packages.yml")
-  
-  # Define function to install packages from 'packages.yml'
+# Define function to install packages from 'packages.yml'
 install_packages <- function(file = "packages.yml") {
   # Read the YAML file
   packages <- yaml::read_yaml(file)
