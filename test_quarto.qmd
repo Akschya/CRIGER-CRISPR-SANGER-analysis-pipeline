@@ -301,16 +301,23 @@ heatmap_data <- melt(intensity_matrix, varnames = c("Base", "Position"), value.n
 heatmap_data$LogIntensity <- log10(heatmap_data$Intensity + 1)  # Adding 1 to avoid log(0)
 
 ## Interactive heatmap
-interactive_heatmap <- plot_ly(z = ~intensity_matrix, x = ~colnames(intensity_matrix), y = ~rownames(intensity_matrix), 
-        type = "heatmap", colors = c("white", "blue", "red"),  colorbar = list(title = "Intensity")) %>%
+interactive_heatmap <- plot_ly(
+  z = ~intensity_matrix,
+  x = ~colnames(intensity_matrix),
+  y = ~rownames(intensity_matrix),
+  type = "heatmap",
+  colors = c("white", "blue", "red"),
+  colorbar = list(title = "Intensity")
+) %>%
   layout(
     title = "Heatmap of Base Intensities Across Positions",
     xaxis = list(
       title = "Position",
       tickvals = seq(0, length(colnames(intensity_matrix)), by = 50),  # Set tick intervals to 50
       ticktext = seq(0, length(colnames(intensity_matrix)), by = 50)   # Adjust tick labels accordingly
-    ),  
-    yaxis = list(title = "Base")
+    ),
+    yaxis = list(title = "Base"),
+    dragmode = "zoom x"  # Restrict zooming to the x-axis
   )
 
 interactive_heatmap
