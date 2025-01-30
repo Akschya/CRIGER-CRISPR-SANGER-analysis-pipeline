@@ -44,7 +44,27 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     library(BiocManager)
 
-BiocManager::install("sangerseqR")
+install_packages <- function(file = "packages.yml") {
+  # Read the YAML file
+  packages <- yaml::read_yaml(file)
+  
+  # Get the list of available Bioconductor packages
+  bioc_pkgs <- BiocManager::available()
+  
+  # Loop through each package and install it
+  for (pkg in packages) {
+      {
+        if (any(pkg %in% bioc_pkgs)) {
+          BiocManager::install(pkg, ask = FALSE)
+        } else {
+          install.packages(pkg)
+        }
+      }
+  }
+}
+
+# Install packages from the 'packages.yml' file
+install_packages()
 ```
 
 # Sequence Metrics
