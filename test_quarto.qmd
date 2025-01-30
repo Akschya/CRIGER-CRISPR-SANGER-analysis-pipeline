@@ -61,6 +61,9 @@ if (!require(yaml)) {
   install.packages("yaml")
   library(yaml)
 }
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+    library(BiocManager)
 
 # Check if the 'packages.yml' file exists
 if (file.exists("packages.yml")) {
