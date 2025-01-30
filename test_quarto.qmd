@@ -308,11 +308,11 @@ heatmap_data$LogIntensity <- log10(heatmap_data$Intensity + 1)  # Adding 1 to av
 
 ## Interactive heatmap
 interactive_heatmap <- plot_ly(
-  z = ~intensity_matrix,
-  x = ~colnames(intensity_matrix),
-  y = ~rownames(intensity_matrix),
-  type = "heatmap",
-  colors = c("white", "blue", "red"),
+  z = ~intensity_matrix, 
+  x = ~colnames(intensity_matrix), 
+  y = ~rownames(intensity_matrix), 
+  type = "heatmap", 
+  colors = c("white", "blue", "red"),  
   colorbar = list(title = "Intensity")
 ) %>%
   layout(
@@ -320,14 +320,17 @@ interactive_heatmap <- plot_ly(
     xaxis = list(
       title = "Position",
       tickvals = seq(0, length(colnames(intensity_matrix)), by = 50),  # Set tick intervals to 50
-      ticktext = seq(0, length(colnames(intensity_matrix)), by = 50)   # Adjust tick labels accordingly
+      ticktext = seq(0, length(colnames(intensity_matrix)), by = 50), # Adjust tick labels
+      fixedrange = FALSE  # Allow zooming on the x-axis
     ),
-    yaxis = list(title = "Base"),
-    dragmode = "zoom x"  # Restrict zooming to the x-axis
+    yaxis = list(
+      title = "Base",
+      fixedrange = TRUE  # Prevent zooming on the y-axis
+    )
   )
 
+# Display the heatmap
 interactive_heatmap
-
 
 # Save the interactive heatmap as HTML
 output_plot <- file.path(output_path_plots, "heatmap.html")
