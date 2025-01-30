@@ -1,4 +1,7 @@
 packages:
   base:
+    - dplyr
+    - ggplot2
   bioconductor:
     - sangerseqR
+    - Biostrings
