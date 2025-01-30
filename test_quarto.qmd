@@ -44,19 +44,22 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     library(BiocManager)
 
-# Define a function to install packages from 'packages.yml'
 install_packages <- function(file = "packages.yml") {
   # Read the YAML file
   packages <- yaml::read_yaml(file)
   
-  # Ensure 'packages' has the expected structure
-  if (!is.list(packages) || is.null(packages$base) || is.null(packages$bioconductor)) {
-    stop("Invalid structure in YAML file. Expected 'base' and 'bioconductor' sections.")
+  # Check if the 'packages' key exists
+  if (!is.list(packages) || is.null(packages$packages)) {
+    stop("Invalid structure in YAML file. Expected a top-level 'packages' key.")
   }
   
+  # Extract sections (base and bioconductor) if they exist
+  base_pkgs <- packages$packages$base
+  bioconductor_pkgs <- packages$packages$bioconductor
+  
   # Install base packages
-  if (length(packages$base) > 0) {
-    for (pkg in packages$base) {
+  if (!is.null(base_pkgs) && length(base_pkgs) > 0) {
+    for (pkg in base_pkgs) {
       if (!requireNamespace(pkg, quietly = TRUE)) {
         install.packages(pkg)
       }
@@ -64,18 +67,15 @@ install_packages <- function(file = "packages.yml") {
   }
   
   # Install Bioconductor packages
-  if (length(packages$bioconductor) > 0) {
+  if (!is.null(bioconductor_pkgs) && length(bioconductor_pkgs) > 0) {
     bioc_pkgs <- BiocManager::available()
-    for (pkg in packages$bioconductor) {
+    for (pkg in bioconductor_pkgs) {
       if (pkg %in% bioc_pkgs && !requireNamespace(pkg, quietly = TRUE)) {
         BiocManager::install(pkg, ask = FALSE)
       }
     }
   }
 }
-
-# Install packages from the 'packages.yml' file
-install_packages()
 ```
 
 # Sequence Metrics
