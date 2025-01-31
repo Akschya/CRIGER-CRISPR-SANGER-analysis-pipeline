@@ -9,6 +9,11 @@ packages:
     - DT
     - reactable
     - writexl
+    - devtools
+    - jsonlite
   bioconductor:
     - sangerseqR
     - Biostrings
+    - msa
+  devtools:
+    - YuLab-SMU/ggmsa
