@@ -83,6 +83,7 @@ install_packages <- function(file = "packages.yml") {
   # Extract sections (base and bioconductor) if they exist
   base_pkgs <- packages$packages$base
   bioconductor_pkgs <- packages$packages$bioconductor
+  dev_pkgs <- packages$packages$devtools
   
   # Install base packages
   if (!is.null(base_pkgs) && length(base_pkgs) > 0) {
@@ -99,6 +100,14 @@ install_packages <- function(file = "packages.yml") {
     for (pkg in bioconductor_pkgs) {
       if (pkg %in% bioc_pkgs && !requireNamespace(pkg, quietly = TRUE)) {
         suppressWarnings(BiocManager::install(pkg, ask = FALSE))
+      }
+    }
+  }
+ # Install devtools packages
+if (!is.null(dev_pkgs) && length(dev_pkgs) > 0) {
+    for (pkg in dev_pkgs) {
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        suppressWarnings(devtools::install_github(pkg))
       }
     }
   }
@@ -123,6 +132,9 @@ suppressPackageStartupMessages(library(kableExtra))
 suppressPackageStartupMessages(library(DT))
 suppressPackageStartupMessages(library(reactable))
 suppressPackageStartupMessages(library(writexl))
+suppressPackageStartupMessages(library(msa))
+suppressPackageStartupMessages(library(ggmsa))
+suppressPackageStartupMessages(library(jsonlite))
 
 ```
 
