@@ -1,6 +1,6 @@
 packages:
   base:
-    - dplyr
+    - tidyverse
     - ggplot2
     - pheatmap
     - reshape2
@@ -11,9 +11,14 @@ packages:
     - writexl
     - devtools
     - jsonlite
+    - dplyr
+    - tidyr
   bioconductor:
     - sangerseqR
     - Biostrings
     - msa
+    - DECIPHER
+    - ggmsa
   devtools:
     - YuLab-SMU/ggmsa
+    - rstudio/gt
