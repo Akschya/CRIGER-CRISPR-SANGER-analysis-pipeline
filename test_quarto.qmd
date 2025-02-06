@@ -22,7 +22,10 @@ format:
 editor: visual
 ---
 
-```{r, include=FALSE}
+```{r}
+#| label: Environment variables setup
+#| include: false
+
 ### Env variable setup ###
 # Set environment variables dynamically in the R chunk
 output_dir <- Sys.getenv("OUTPUT_DIR")
@@ -49,8 +52,9 @@ output_path_results <-  paste0(output_dir, "Outputs/Results")
 }
 ```
 
-```{r setup, include=FALSE}
+```{r}
 #| label: R environment setup
+#| include: false
 
 #### R ENV SETUP ####
 options(warn = -1)  # Suppress warnings
@@ -116,10 +120,9 @@ if (!is.null(dev_pkgs) && length(dev_pkgs) > 0) {
 install_packages()
 ```
 
-# Sequence Metrics
-
-```{r, include=FALSE}
+```{r}
 #| label: Load libraries
+#| include: false
 
 # Load necessary libraries
 suppressPackageStartupMessages(library(sangerseqR))
@@ -132,15 +135,33 @@ suppressPackageStartupMessages(library(kableExtra))
 suppressPackageStartupMessages(library(DT))
 suppressPackageStartupMessages(library(reactable))
 suppressPackageStartupMessages(library(writexl))
-suppressPackageStartupMessages(library(msa))
 suppressPackageStartupMessages(library(ggmsa))
 suppressPackageStartupMessages(library(jsonlite))
+suppressPackageStartupMessages(library(msa))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(gt))
+suppressPackageStartupMessages(library(DECIPHER))
 
 ```
 
-```{r, include=FALSE}
+# **Sanger Analysis Report**
 
+-   This report provides a detailed analysis of CRISPR-edited DNA sequences obtained through Sanger sequencing.
+
+-   The analysis includes sequence base calling, quality metrics, and visualization of chromatograms and heatmaps.
+
+-   The report is interactive, allowing easy navigation through the tables and images.
+
+# Sequence Metrics
+
+-   **Primary Base Call**: The main sequence predicted by the sequencing software.
+
+-   **Internal Base Call**: A refined sequence based on raw intensity values.
+
+```{r}
 #| label: Data Import
+#| include: false
 
 data <- read.abif(input_ab1)
 #str(data)
@@ -153,14 +174,16 @@ int <- sangerseq(data)
 
 ## Default primary base call sequence
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 print(int@primarySeq)
 ```
 
 ## Internal basecall
 
-```{r, echo=FALSE}
+```{r}
 #| label: Data processing 
+#| echo: false
 
 ## Perform internal base calling
 basecalls <- makeBaseCalls(int)
@@ -173,8 +196,19 @@ peak_positions <- peakPosMatrix(basecalls)
 
 ## Intensity matrix
 
-```{r, echo=FALSE}
+The intensity matrix represents raw signal strengths for each DNA base (A, C, G, T) at different positions.
+
+-   **How to interpret the table?**
+
+    -   Each row corresponds to a nucleotide.
+
+    -   Each column represents a position in the sequence.
+
+    -   Higher values indicate stronger signal intensity.
+
+```{r}
 #| lable: Intensity matrix
+#| echo: false
 
 ## Raw intensity values at base-called positions
 intensity_matrix <- matrix(NA, nrow = 4, ncol = nrow(peak_positions))
@@ -222,14 +256,24 @@ write_xlsx(intensity_df, output_file)
 ```{r tblMtcarsCaption, echo=FALSE}
 #| label: tbl-Mtcars-1
 #| classes: dummyTable
-#| tbl-cap: "Intensity Matrix"
+#| tbl-cap: "Raw Intensity/Trace Matrix"
 #| tbl-cap-location: top
 mtcars[1,] |> knitr::kable()   # Dummy table is completely hidden from report
 ```
 
 ## Summary table
 
-```{r, echo=FALSE}
+-   A breakdown of how many times each base (A, C, G, T) appears in the sequence.
+
+-   The percentage composition of each base.
+
+-   The values help check sequencing quality.
+
+-   Unexpected high percentages of a single base may indicate sequencing errors.
+
+```{r}
+#| label: Summary Table
+#| echo: false
 ## Overall metrics summary table
 # Calculate base counts
 base_count <- alphabetFrequency(int@primarySeq, baseOnly = TRUE)
@@ -269,10 +313,11 @@ reactable(
 output_file <- file.path(output_path_results, "summary_table.xlsx")
 write_xlsx(summary_table, output_file)
 ```
+
 ```{r tblMtcarsCaption, echo=FALSE}
 #| label: tbl-Mtcars-2
 #| classes: dummyTable
-#| tbl-cap: "Sequence Metrics Summary"
+#| tbl-cap: "Sequence Metrics Summary Table"
 #| tbl-cap-location: top
 mtcars[1,] |> knitr::kable()   # Dummy table is completely hidden from report
 ```
@@ -281,8 +326,11 @@ mtcars[1,] |> knitr::kable()   # Dummy table is completely hidden from report
 
 ## Chromatogram
 
-```{r, echo=FALSE}
+A graphical representation of the sequencing data, showing peaks for each base. Each peak corresponds to a nucleotide in the DNA sequence.
+
+```{r}
 #| label: Visualization
+#| echo: false
 #| fig-cap: "Chromatogram"
 #| fig-cap-location: bottom
 
@@ -306,15 +354,20 @@ dev.off()  # Close the PNG device
   <img src="chromatogram.png" width="{{ wdt }}">
 </div>
 ```
+
 ```{=html}
 <div style="text-align: center; color: gray; font-size: 0.9em;">
   Figure 1: Chromatogram
 </div>
 ```
+
 ## Heatmap
 
-```{r, echo=FALSE}
+A heatmap represents the signal intensity of each base at each position. Darker colors indicate higher intensity values.
 
+```{r}
+#| label: Heatmap
+#| echo: false
 
 # Reshape the intensity matrix for ggplot
 heatmap_data <- melt(intensity_matrix, varnames = c("Base", "Position"), value.name = "Intensity")
@@ -354,16 +407,18 @@ htmlwidgets::saveWidget(interactive_heatmap, output_plot)
 # Log transform intensity data for better visualization
 heatmap_data$LogIntensity <- log10(heatmap_data$Intensity + 1)
 ```
+
 ```{=html}
 <div style="text-align: center; color: gray; font-size: 0.9em;">
-  Figure 2: Intensity heatmap
+  Figure 2: Intensity Heatmap
 </div>
 ```
 
 ## Bar plot
 
-```{r, echo=FALSE}
-
+```{r}
+#| label: Bar Plot
+#| echo: false
 ## Stacked bar plot
 ggplot_bar_plot <- ggplot(heatmap_data, aes(x = Position, y = LogIntensity, fill = Base)) +
   geom_bar(stat = "identity") +
@@ -404,20 +459,24 @@ interactive_bar_plot <- ggplotly(ggplot_bar_plot) %>%
 interactive_bar_plot 
 
 # Save the interactive bar plot as HTML
-output_plot <- file.path(output_path_plots, "stacked_bar_plot.html")
+output_plot <- file.path(output_path_plots, "Stacked_bar_plot.html")
 htmlwidgets::saveWidget(interactive_bar_plot, output_plot)
 
 ```
+
 ```{=html}
 <div style="text-align: center; color: gray; font-size: 0.9em;">
-  Figure 3: Stacked bar plot
+  Figure 3: Stacked Bar Plot of Intenisty Values Vs Base Position
 </div>
 ```
 
 ## Line plot
 
-```{r, echo=FALSE}
-## Line plot
+```{r}
+#| label: Line plot
+#| echo: false
+
+
 interactive_line_plot <- plot_ly(
   data = heatmap_data,
   x = ~Position,
@@ -462,15 +521,427 @@ output_plot <- file.path(output_path_plots, "line_plot.html")
 htmlwidgets::saveWidget(interactive_line_plot, output_plot)
 
 ```
+
 ```{=html}
 <div style="text-align: center; color: gray; font-size: 0.9em;">
-  Figure 4: Line Plot
+  Figure 4: Line Plot of Intenisty Values Vs Base Position
 </div>
 ```
 
+# ICE Analysis Results
 
-```{r, include=FALSE}
+-   This section presents key analyses of CRISPR edits using ICE (Inference of CRISPR Edits).
+
+-   It includes sequence alignments, discordance plots, indel distributions, and editing outcome tables.
+
+## Sequence Alignments
+
+DNA sequence alignment helps compare CRISPR-edited sequences with a reference control to identify mutations.
+
+#### **Interpreting the Alignment**
+
+-   The image displays the aligned sequences with color-coded nucleotides.
+
+-   Conserved regions appear in similar colors.
+
+-   Gaps indicate deletions, and mismatched bases are mutations.
+
+```{r}
+#| label: Alignment 
+#| echo: false
+
+setwd(output_path_results)
+# Read the JSON file
+json_file <- list.files(pattern = "\\.all\\.json$")
+alignment_data <- fromJSON(json_file)
+# Convert to DNAStringSet
+control <- DNAStringSet(alignment_data$control)
+edited <- DNAStringSet(alignment_data$edited)
+
+# Combine into a single DNAStringSet object
+sequences <- DNAStringSet(c(control, edited))
+names(sequences) <- c("Control", "Edited")
+# Align sequences
+aligned_sequences <- msa(sequences)
+
+# Convert to XStringSet for export
+aligned_XStringSet <- DNAStringSet(unlist(aligned_sequences))  
+
+writeXStringSet(aligned_XStringSet, "aligned_sequences.fasta")
+# Calculate maximum sequence length
+max_length <- max(width(aligned_XStringSet))
+
+# Plot alignment
+# Assuming aligned_XStringSet contains your aligned sequences
+alignment <- ggmsa(aligned_XStringSet, start = 1, end = max_length, char_width = 0.5, seq_name = TRUE, color = "Chemistry_NT") +
+  geom_seqlogo() + 
+  theme_minimal()+ 
+  theme(
+    text = element_text(size = 4),   # Increases overall text size
+    axis.text = element_text(size = 4),  # Increase label size
+    legend.text = element_text(size = 3) # Increase legend size
+  ) +
+  labs(title = "Multiple Sequence Alignment")
+
+
+# Set the output image path
+img_path <- "Alignment.png"
+wdt <- max_length*25
+# Save the alignment to a high-quality PNG file
+ggsave(
+  filename = img_path,
+  plot = alignment,
+  width = wdt / 350,   # Scale width properly
+  height = 0.7,          # Fixed height (adjust as needed)
+  units = "in",
+  dpi = 300            # High resolution
+)
+
+```
+
+```{=html}
+<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="alignment.png" width="{{ wdt }}">
+</div>
+```
+
+```{=html}
+<div style="text-align: center; color: gray; font-size: 0.9em;">
+  Figure 5:   Sequence Alignment: Control Vs Edited
+</div>
+```
+
+## Indel Distribution
+
+## Discordance Plot
+
+-   The discordance plot details the level of alignment per base between the wild type (control) and the edited sample in the inference window (the region around the cute site), i.e. it shows the average amount of signal that disagrees with the reference sequence derived from the control trace file.
+
+-   On the plot, the green line and lavender line should be close together before the cut site, with a typical CRISPR edit resulting in a jump in the discordance near the cutsite and continuing to remain far apart after the cut site (representing a high level of sequence discordance).
+
+```{r}
+#| label: Discordance Plot
+#| echo: false
+
+# Load the JSON file
+setwd(output_path_results)
+indel_file <- list.files(pattern = "\\.indel\\.json$")
+data <- fromJSON(indel_file)
+
+# Extract relevant data from the JSON structure
+bp <- data$discord_plot$bp
+control_discord <- data$discord_plot$control_discord
+edited_discord <- data$discord_plot$edited_discord
+aln_start <- data$discord_plot$aln_start
+aln_end <- data$discord_plot$aln_end
+cut_site <- data$discord_plot$cut_site
+inf_start <- data$discord_plot$inf_start
+inf_end <- data$discord_plot$inf_end
+r_sq <- data$r_sq
+
+# Create a data frame for plotting
+plot_data <- data.frame(
+  Position = bp,
+  Control = control_discord,
+  Edited = edited_discord
+)
+
+# Convert the data to long format for ggplot2
+plot_data_long <- melt(
+  plot_data,
+  id.vars = "Position",
+  variable.name = "Sample",
+  value.name = "Discordance"
+)
+
+
+# Plot using plotly
+discordance_plotly <- plot_ly(plot_data_long, 
+                              x = ~Position, 
+                              y = ~Discordance, 
+                              color = ~Sample, 
+                              type = 'scatter', 
+                              mode = 'lines',
+                              line = list(width = 2),
+                              hoverinfo = "text",  # This will ensure hover info appears only on hover
+                              text = ~paste("Position: ", Position, "<br>Discordance: ", Discordance)  # Display hover text
+) %>%
+  layout(
+    title = "",
+    xaxis = list(
+      title = "Position (bp)", 
+      tickmode = "array", 
+      tickvals = seq(min(plot_data_long$Position), max(plot_data_long$Position), by = 50), # Adjust x-axis ticks in steps of 50
+      ticktext = seq(min(plot_data_long$Position), max(plot_data_long$Position), by = 50), # Custom ticks
+      fixedrange = FALSE,
+      showgrid = TRUE,  # Make grid lines visible
+      zeroline = FALSE  # Hide the zero line
+    ),
+    yaxis = list(
+      title = "Discordance", 
+      fixedrange = TRUE,
+      range = c(0, 1.1), # Add space above 1 to make plot visually appealing
+      showgrid = TRUE,  # Make grid lines visible
+      zeroline = FALSE  # Hide the zero line
+    ),
+    shapes = list(
+      # Add shaded areas for alignment and inference windows
+      list(type = "rect", x0 = aln_start, x1 = aln_end, y0 = 0, y1 = 1, fillcolor = "blue", opacity = 0.1, line = list(width = 0)),
+      list(type = "rect", x0 = inf_start, x1 = inf_end, y0 = 0, y1 = 1, fillcolor = "green", opacity = 0.1, line = list(width = 0)),
+      # Add vertical line for cut site
+      list(type = "line", x0 = cut_site, x1 = cut_site, y0 = 0, y1 = 1, line = list(color = "#E34234", dash = "dash"))
+    ),
+    annotations = list(
+      # Add labels for the windows and R² value
+      list(x = inf_start + 28, y = 1.02, text = "Inference Window", showarrow = FALSE, font = list(size = 14, color = "#699b0e")),
+      list(x = aln_start + 28, y = 1.02, text = "Alignment Window", showarrow = FALSE, font = list(size = 14, color = "#ac87cb")),
+      list(x = max(plot_data_long$Position), y = 1.05, text = paste("R² = ", round(r_sq, 2)), showarrow = FALSE, font = list(size = 16, color = "gray50"))
+    ),
+    dragmode = "zoom",  # Allow zooming on x-axis
+    xaxis = list(range = c(min(plot_data_long$Position), max(plot_data_long$Position))), # Restrict zooming to the x-axis
+    yaxis = list(range = c(0, 1.1)),  # Restrict zooming to y-axis range
+    showlegend = TRUE,
+    legend = list(
+      tracegroupgap = 0,
+      itemclick = "toggleothers",  # This makes non-hovered traces transparent
+      font = list(size = 12),
+      orientation = 'h',  # Place the legend horizontally at the bottom
+      xanchor = 'center', 
+      yanchor = 'top',
+      x = 0.5,
+      y = -0.18
+    )
+  )
+
+# Display the interactive plot
+discordance_plotly
+
+
+```
+
+```{=html}
+<div style="text-align: center; color: gray; font-size: 0.9em;">
+  Figure 6:   Discordance Plot: Control Vs Edited
+  Save the plot as PNG by clicking on the "camera icon" on the top right corner
+</div>
+```
+
+## Indel Plot
+
+-   The Indel plot displays the inferred distribution of indels in the entire edited population of genomes.
+
+-   Hovering over each bar of the Indel plot shows the size of the insertion or deletion (+ or - 1 or more nucleotides), along with the percentage of genomes that contain it.
+
+-   Note: Each indel size represented in the Indel plot may not necessarily occur in the same sequence. The percentages of different indel sizes in the cell population are not the same as ICE/KO-Score scores.
+
+```{r}
+#| label: Indel Plot
+#| echo: false
+
+# Extract editing_outcomes from the data
+editing_outcomes <- data$editing_outcomes
+
+# Convert the data to a data frame
+plot_data <- data.frame(
+  IndelSize = as.integer(names(editing_outcomes)),
+  Percentage = as.numeric(editing_outcomes)
+)
+
+# Create the bar plot using plotly without text on top of bars
+indel_plot <- plot_ly(plot_data, 
+                    x = ~IndelSize, 
+                    y = ~Percentage, 
+                    type = 'bar',
+                    marker = list(color = 'rgba(55, 128, 191, 0.7)', line = list(color = 'rgba(55, 128, 191, 1)', width = 2)),
+                    hoverinfo = "text",
+                    text = ~paste("Indel Size: ", IndelSize, "<br>Percentage: ", Percentage, "%"),  # Keep hover info but no text on bars
+                    textposition = 'none'
+) %>%
+  layout(
+    title = "",
+    xaxis = list(
+      title = "Indel Size", 
+      tickmode = "array", 
+      tickvals = seq(min(plot_data$IndelSize), max(plot_data$IndelSize), by = 5),  # Adjust x-axis ticks in steps of 5
+      ticktext = seq(min(plot_data$IndelSize), max(plot_data$IndelSize), by = 5)   # Custom ticks
+    ),
+    yaxis = list(
+      title = "Percentage of Indels",
+      range = c(0, max(plot_data$Percentage) * 1.05),  # Leave space above the max value for better aesthetics
+      tickmode = "array", 
+      tickvals = seq(0, max(plot_data$Percentage), by = 5),  # Adjust y-axis ticks in steps of 5
+      ticktext = seq(0, max(plot_data$Percentage), by = 5)   # Custom ticks
+    ),
+    showlegend = FALSE  # No legend needed for this plot
+  )
+
+# Display the interactive bar plot
+indel_plot
+
+
+```
+
+```{=html}
+<div style="text-align: center; color: gray; font-size: 0.9em;">
+  Figure 7:   Indel Plot
+  Save the plot as PNG by clicking on the "camera icon" on the top right corner
+</div>
+```
+
+## Contributions
+
+This table summarizes the contribution of each sequence variant in the edited population.
+
+```{r}
+#| label: Editing outcome table
+#| echo: false
+
+# Step 1: Read the JSON file
+setwd(output_path_results)
+contribs_file <- list.files(pattern = "\\.contribs\\.json$")
+json_data <- fromJSON(contribs_file)
+
+# Step 2: Extract relevant data
+contribs_list <- json_data$contribs_list
+
+# Function to extract indel details safely
+extract_indel_label <- function(indel_details) {
+  if (!is.null(indel_details) && nrow(indel_details) > 0) {
+    paste0(indel_details$value[1], "[", indel_details$label[1], "]")
+  } else {
+    "0[g1]"
+  }
+}
+
+# Create dataframe
+alignment_data <- data.frame(
+  Sequence = contribs_list$human_readable,
+  `Relative Abundance (%)` = round(contribs_list$rel_abundance * 100, 2),  # Convert to %
+  `Indel Label` = sapply(contribs_list$indel$details, extract_indel_label),
+  `Wild-Type` = ifelse(contribs_list$wt, "Yes", "No")
+)
+
+# Sort by relative abundance
+alignment_data <- alignment_data %>%
+  arrange(desc(Relative.Abundance....))
+
+# Fix column names
+colnames(alignment_data) <- c("Sequence", "Relative Abundance (%)", "Indel Label", "Wild Type")
+
+# Rearrange columns to move 'Sequence' to the last
+alignment_data <- alignment_data %>%
+  select(`Indel Label`, `Relative Abundance (%)`, `Wild Type`, Sequence)
+
+# Create a scrollable table with gt
+table <- alignment_data %>%
+  gt() %>%
+  tab_header(title = md("**Relative contribution of each sequence (normalized)**")) %>%  # Title bold
+  cols_label(
+    `Indel Label` = md("**Indel Label**"),
+    `Relative Abundance (%)` = md("**Relative Abundance (%)**"),
+    `Wild Type` = md("**Wild Type**"),
+    `Sequence` = md("**Sequence**")
+  ) %>%
+  cols_align(align = "center", columns = everything()) %>%  # Center align all columns
+  cols_align(align = "left", columns = Sequence) %>%  # Left-align sequences
+  tab_options(
+    table.font.size = "small"
+  ) %>%
+  fmt_number(columns = `Relative Abundance (%)`, decimals = 2) %>%
+  data_color(
+    columns = `Wild Type`,
+    colors = c("Yes" = "#C5F0FF", "No" = "#FFC5D3")
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold", align = "center"),
+    locations = cells_column_labels(everything())  # Make column headers bold and center-aligned
+  ) %>%
+  tab_style(
+    style = cell_text(font = "Courier New", align = "left", size = "14px"),  # Use monospace font
+    locations = cells_body(columns = Sequence)
+  )
+table
+table_df <- as.data.frame(table)
+write_xlsx(table_df, "ICE_table.xlsx")
+```
+
+```{r tblMtcarsCaption, echo=FALSE}
+#| label: tbl-Mtcars-3
+#| classes: dummyTable
+#| tbl-cap: "Relative contribution of each sequence (normalized)"
+#| tbl-cap-location: top
+mtcars[1,] |> knitr::kable()   # Dummy table is completely hidden from report
+```
+
+## Multiple Sequence Alignment
+
+```{r}
+#| label: MSA-Plot
+#| echo: false
+#| warning: false
+#### Multiple Sequence Alignment ####
+sequences <- alignment_data$Sequence
+# Remove separator and unknown characters
+sequences <- gsub("\\|", "", sequences)  # Remove separator
+sequences <- gsub("n", "N", sequences)   # Convert 'n' to '-'
+sequences <- gsub("-", "", sequences)    # Remove gaps for alignment
+
+
+# Create a DNAStringSet
+dna_set <- DNAStringSet(sequences)
+names(dna_set) <- alignment_data$`Indel Label`  # Name the sequences
+
+# Perform MSA
+alignment <- AlignSeqs(dna_set, anchor = NA)  # `anchor = NA` prevents fixing the reference
+
+# Convert alignment to a data frame for visualization
+alignment_fasta <- "alignment.fasta"
+writeXStringSet(alignment, alignment_fasta)
+
+max_length <- max(nchar(sequences))
+
+msa <- ggmsa(
+  alignment_fasta, start = 1, end = max_length, 
+  color = "Chemistry_NT", seq_name = TRUE
+) + 
+  theme_minimal() +
+  theme(
+    text = element_text(size = 8),   # Increases overall text size
+    axis.text = element_text(size = 5),  # Increase label size
+    legend.text = element_text(size = 5) # Increase legend size
+  ) +
+  labs(title = "Multiple Sequence Alignment")
+
+# Set the output image path
+img_path <- paste0(output_path_plots, "/MSA.png")
+wdt <- max_length*25
+# Save the MSA to a high-quality PNG file
+ggsave(
+  filename = img_path,
+  plot = msa,
+  width = wdt / 350,   # Scale width properly
+  height = 1,          # Fixed height (adjust as needed)
+  units = "in",
+  dpi = 300            # High resolution
+)
+
+```
+
+```{=html}
+<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="MSA.png" width="{{ wdt }}">
+</div>
+```
+
+```{=html}
+<div style="text-align: center; color: gray; font-size: 0.9em;">
+  Figure 8: Multiple Sequence Alignment Of Different Editing Outcomes
+</div>
+```
+
+```{r}
 #| label: Additional plots
+#| include: false
 ## Density plot
 # ggplot(heatmap_data, aes(x = Intensity, fill = Base)) +
 #   geom_density(alpha = 0.5) +
@@ -493,6 +964,7 @@ htmlwidgets::saveWidget(interactive_line_plot, output_plot)
 #   labs(title = "Base Intensities Across Positions", x = "Position", y = "Base") +
 #   theme_minimal()
 ```
+
 # Session Info
 
 ```{r, echo=FALSE}
