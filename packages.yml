@@ -13,6 +13,7 @@ packages:
     - jsonlite
     - dplyr
     - tidyr
+    - readxl
   bioconductor:
     - sangerseqR
     - Biostrings
