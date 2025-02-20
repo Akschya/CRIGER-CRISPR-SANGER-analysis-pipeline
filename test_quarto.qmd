@@ -638,6 +638,7 @@ cut_site <- data$discord_plot$cut_site
 inf_start <- data$discord_plot$inf_start
 inf_end <- data$discord_plot$inf_end
 r_sq <- data$r_sq
+ed_eff <- data$editing_eff
 
 # Create a data frame for plotting
 plot_data <- data.frame(
@@ -715,8 +716,14 @@ discordance_plotly <- plot_ly(plot_data_long,
 
 # Display the interactive plot
 discordance_plotly
+```
 
+```{r}
+#| label: ICE analysis vallues
+#| echo: false
 
+print(paste0("Model Fit (R2) = ", r_sq))
+print(paste0("Editing efficiency = ", ed_eff))
 ```
 
 ```{=html}
