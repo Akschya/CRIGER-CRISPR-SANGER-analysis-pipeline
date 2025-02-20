@@ -14,6 +14,7 @@ packages:
     - dplyr
     - tidyr
     - readxl
+    - ggalt
   bioconductor:
     - sangerseqR
     - Biostrings
