@@ -347,12 +347,13 @@ dev.off()  # Close the PNG device
 
 ## Chromatogram
 #chromatogram(int, width = length(int@primarySeq), height = 5, showcalls = "both")
+chromatogram_path <- file.path(output_path_plots, "chromatogram.png")
 ```
 
 ```{=html}
 cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="%s/chromatogram.png" width="%s">
-</div>', output_path_plots, wdt))
+  <img src="%s" width="%s">
+</div>', chromatogram_path, wdt))
 ```
 
 ```{=html}
