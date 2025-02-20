@@ -177,8 +177,6 @@ int <- sangerseq(data)
 ```{r}
 #| echo: false
 print(int@primarySeq)
-print(output_path_results)
-print(output_path_plots)
 ```
 
 ## Internal basecall
@@ -352,9 +350,9 @@ dev.off()  # Close the PNG device
 ```
 
 ```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="chromatogram.png" width="{{ wdt }}">
-</div>
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s/chromatogram.png" width="%s">
+</div>', output_path_plots, wdt))
 ```
 
 ```{=html}
