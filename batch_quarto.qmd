@@ -897,7 +897,7 @@ sequences <- gsub("-", "", sequences)    # Remove gaps for alignment
 
 # Create a DNAStringSet
 dna_set <- DNAStringSet(sequences)
-names(dna_set) <- alignment_data$`Indel Label`  # Name the sequences
+names(dna_set) <- paste0(alignment_data$`Indel Label`, "_", seq_along(alignment_data$`Indel Label`))  # Name the sequences
 
 # Perform MSA
 alignment <- AlignSeqs(dna_set, anchor = NA)  # `anchor = NA` prevents fixing the reference
