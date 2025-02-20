@@ -351,9 +351,9 @@ chromatogram_path <- file.path(output_path_plots, "chromatogram.png")
 ```
 
 ```{=html}
-cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="%s" width="%s">
-</div>', chromatogram_path, wdt))
+<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="{{ output_path_plots }}/chromatogram.png" width="{{ wdt }}">
+  </div>
 ```
 
 ```{=html}
