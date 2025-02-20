@@ -887,6 +887,7 @@ mtcars[1,] |> knitr::kable()   # Dummy table is completely hidden from report
 #| label: MSA-Plot
 #| echo: false
 #| warning: false
+#| include: false
 #### Multiple Sequence Alignment ####
 sequences <- alignment_data$Sequence
 # Remove separator and unknown characters
