@@ -718,19 +718,19 @@ discordance_plotly <- plot_ly(plot_data_long,
 discordance_plotly
 ```
 
+```{=html}
+<div style="text-align: center; color: gray; font-size: 0.9em;">
+  Figure 6:   Discordance Plot: Control Vs Edited
+  Save the plot as PNG by clicking on the "camera icon" on the top right corner
+</div>
+```
+
 ```{r}
 #| label: ICE analysis vallues
 #| echo: false
 
 print(paste0("Model Fit (R2) = ", r_sq))
 print(paste0("Editing efficiency = ", ed_eff))
-```
-
-```{=html}
-<div style="text-align: center; color: gray; font-size: 0.9em;">
-  Figure 6:   Discordance Plot: Control Vs Edited
-  Save the plot as PNG by clicking on the "camera icon" on the top right corner
-</div>
 ```
 
 ## Indel Plot
