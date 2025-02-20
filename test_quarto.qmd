@@ -599,10 +599,10 @@ ggsave(
 
 ```
 
-```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="alignment.png" width="{{ wdt }}">
-</div>
+```{r, results="asis", echo=FALSE}
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s" width="%d">
+  </div>', img_path, wdt))
 ```
 
 ```{=html}
@@ -928,10 +928,10 @@ ggsave(
 
 ```
 
-```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="MSA.png" width="{{ wdt }}">
-</div>
+```{r, results="asis", echo=FALSE}
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s" width="%d">
+  </div>', img_path, wdt))
 ```
 
 ```{=html}
