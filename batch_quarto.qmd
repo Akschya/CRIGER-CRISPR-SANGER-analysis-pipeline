@@ -31,6 +31,7 @@ editor: visual
 output_dir <- Sys.getenv("OUTPUT_DIR")
 input_ab1 <- Sys.getenv("INPUT_AB1")
 batch_input_file <- Sys.getenv("BATCH_INPUT_FILE")
+sample_name <- Sys.getenv("sample_name")
 output_path_plots <- file.path(output_dir, "Outputs", sample_name, "Plots")
 output_path_results <- file.path(output_dir, "Outputs", sample_name, "Results")
 ```
