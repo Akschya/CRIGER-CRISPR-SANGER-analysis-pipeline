@@ -349,10 +349,10 @@ dev.off()  # Close the PNG device
 #chromatogram(int, width = length(int@primarySeq), height = 5, showcalls = "both")
 ```
 
-```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="{{ img_path }}" width="{{ wdt }}">
-  </div>
+```{r, results="asis", echo=FALSE}
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s" width="%d">
+  </div>', img_path, wdt))
 ```
 
 ```{=html}
