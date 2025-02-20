@@ -359,10 +359,10 @@ dev.off()  # Close the PNG device
 #chromatogram(int, width = length(int@primarySeq), height = 5, showcalls = "both")
 ```
 
-```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="chromatogram.png" width="{{ wdt }}">
-</div>
+```{r, results="asis", echo=FALSE}
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s" width="%d">
+  </div>', img_path, wdt))
 ```
 
 ```{=html}
@@ -595,7 +595,7 @@ alignment <- ggmsa(aligned_XStringSet, start = 1, end = max_length, char_width =
 
 
 # Set the output image path
-img_path <- "Alignment.png"
+img_path <- file.path(output_path_plots, "Alignment.png")
 wdt <- max_length*25
 # Save the alignment to a high-quality PNG file
 ggsave(
@@ -609,10 +609,10 @@ ggsave(
 
 ```
 
-```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="alignment.png" width="{{ wdt }}">
-</div>
+```{r, results="asis", echo=FALSE}
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s" width="%d">
+  </div>', img_path, wdt))
 ```
 
 ```{=html}
@@ -725,8 +725,6 @@ discordance_plotly <- plot_ly(plot_data_long,
 
 # Display the interactive plot
 discordance_plotly
-
-
 ```
 
 ```{=html}
@@ -734,6 +732,14 @@ discordance_plotly
   Figure 6:   Discordance Plot: Control Vs Edited
   Save the plot as PNG by clicking on the "camera icon" on the top right corner
 </div>
+```
+
+```{r}
+#| label: ICE analysis vallues
+#| echo: false
+
+print(paste0("Model Fit (R2) = ", r_sq))
+print(paste0("Editing efficiency = ", ed_eff))
 ```
 
 ## Indel Plot
@@ -787,8 +793,6 @@ indel_plot <- plot_ly(plot_data,
 
 # Display the interactive bar plot
 indel_plot
-
-
 ```
 
 ```{=html}
@@ -936,10 +940,10 @@ ggsave(
 
 ```
 
-```{=html}
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="MSA.png" width="{{ wdt }}">
-</div>
+```{r, results="asis", echo=FALSE}
+cat(sprintf('<div style="overflow-x: auto; white-space: nowrap;">
+  <img src="%s" width="%d">
+  </div>', img_path, wdt))
 ```
 
 ```{=html}
