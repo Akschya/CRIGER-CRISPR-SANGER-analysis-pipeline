@@ -585,7 +585,7 @@ alignment <- ggmsa(aligned_XStringSet, start = 1, end = max_length, char_width =
 
 
 # Set the output image path
-img_path <- "Alignment.png"
+img_path <-  file.path(output_path_plots, "Alignment.png")
 wdt <- max_length*25
 # Save the alignment to a high-quality PNG file
 ggsave(
