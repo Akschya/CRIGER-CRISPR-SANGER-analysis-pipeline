@@ -19,7 +19,6 @@ packages:
     - Biostrings
     - msa
     - DECIPHER
-    - ggmsa
   devtools:
     - YuLab-SMU/ggmsa
     - rstudio/gt
