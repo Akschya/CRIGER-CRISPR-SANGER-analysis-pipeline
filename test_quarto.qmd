@@ -177,6 +177,8 @@ int <- sangerseq(data)
 ```{r}
 #| echo: false
 print(int@primarySeq)
+print(output_path_results)
+print(output_path_plots)
 ```
 
 ## Internal basecall
