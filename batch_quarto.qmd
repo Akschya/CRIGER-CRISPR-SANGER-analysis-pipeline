@@ -143,6 +143,7 @@ suppressPackageStartupMessages(library(tidyr))
 suppressPackageStartupMessages(library(gt))
 suppressPackageStartupMessages(library(DECIPHER))
 suppressPackageStartupMessages(library(readxl))
+suppressPackageStartupMessages(library(openxlsx))
 ```
 
 # **Sanger Analysis Report**
@@ -163,7 +164,7 @@ suppressPackageStartupMessages(library(readxl))
 #| label: Data Import
 #| include: false
 
-batch_data <- read_excel(batch_input_file)
+batch_data <- openxlsx::read.xlsx(batch_input_file)
 batch_data$number <- seq(0, nrow(batch_data) - 1)
 # Create the combined sample name by concatenating the first two columns (Label and Control File)
 batch_data$sample_name_combined <- paste0(batch_data$number, "_", batch_data$`Label`)
