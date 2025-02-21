@@ -167,7 +167,7 @@ suppressPackageStartupMessages(library(openxlsx))
 batch_data <- openxlsx::read.xlsx(batch_input_file)
 batch_data$number <- seq(0, nrow(batch_data) - 1)
 # Create the combined sample name by concatenating the first two columns (Label and Control File)
-batch_data$sample_name_combined <- paste0(batch_data$number, "_", batch_data$`Label`)
+batch_data$sample_name_combined <- paste0(batch_data$number, "-", batch_data$`Label`)
 # Find the row corresponding to the current sample
 sample_row <- batch_data[batch_data$sample_name_combined == sample_name, ]
 # Extract the corresponding experiment file
