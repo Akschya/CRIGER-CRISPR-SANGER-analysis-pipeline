@@ -15,6 +15,7 @@ packages:
     - tidyr
     - readxl
     - ggalt
+    - openxlsx
   bioconductor:
     - sangerseqR
     - Biostrings
