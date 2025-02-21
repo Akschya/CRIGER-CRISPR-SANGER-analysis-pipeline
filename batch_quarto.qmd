@@ -173,9 +173,9 @@ sample_row <- batch_data[batch_data$sample_name_combined == sample_name, ]
 # Extract the corresponding experiment file
 experiment_file <- sample_row$`Experiment File`
 # Now, use the experiment file for input
-input_ab1 <- file.path(input_ab1, experiment_file)
+input_file_ab1 <- file.path(input_ab1, experiment_file)
 
-data <- read.abif(input_ab1)
+data <- read.abif(input_file_ab1)
 #str(data)
 #class(int)
 
