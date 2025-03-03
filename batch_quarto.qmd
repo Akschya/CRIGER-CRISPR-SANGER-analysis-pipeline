@@ -19,6 +19,8 @@ format:
     - text: CRISPR Analysis Repo
       icon: github
       href: https://github.com/Akschya/CRISPR_Analysis 
+params:
+  sample_name: "default_sample" 
 editor: visual
 ---
 
@@ -30,10 +32,10 @@ editor: visual
 # Set environment variables dynamically in the R chunk
 output_dir <- Sys.getenv("OUTPUT_DIR")
 input_ab1 <- Sys.getenv("INPUT_AB1")
+sample_name <- params$sample_name 
 batch_input_file <- Sys.getenv("BATCH_INPUT_FILE")
-sample_name <- Sys.getenv("sample_name")
 output_path_plots <- file.path(output_dir, "Outputs", sample_name, "Plots")
-output_path_results <- file.path(output_dir, "Outputs", sample_name, "Results")
+output_path_results <- file.path(output_dir, "Outputs", sample_name, "Results") 
 ```
 
 ```{css classDummyTable, echo=FALSE}
