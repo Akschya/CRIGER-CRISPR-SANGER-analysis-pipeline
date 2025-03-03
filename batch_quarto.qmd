@@ -652,6 +652,7 @@ cut_site <- data$discord_plot$cut_site
 inf_start <- data$discord_plot$inf_start
 inf_end <- data$discord_plot$inf_end
 r_sq <- data$r_sq
+ed_eff <- data$ed_eff
 
 # Create a data frame for plotting
 plot_data <- data.frame(
