@@ -1,0 +1,24 @@
+####### Configuration file for CRIGER pipeline #######
+
+# Path to the working directory where Docker commands will run
+WORKING_DIR='path/to/working/dir'
+
+# Absolute path to input AB1 file (for single analysis) or directory (for batch analysis)
+INPUT_AB1='path/to/input/ab1/file'
+
+# Absolute path to the control AB1 file (used for single analysis)
+CONTROL_AB1='path/to/control/ab1'
+
+# Guide RNA sequence (used for single analysis)
+GUIDE_RNA_SEQUENCE='gRNA_Seq_string'
+
+# Absolute path to the output directory where results will be saved (recomended to keep working dir and output dir as same)
+OUTPUT_DIR='path/to/output/dir'
+
+# Analysis type: 'single' or 'batch'
+ANALYSIS_TYPE='single/batch'
+
+# Absolute path to the batch input Excel file (required for batch analysis)
+BATCH_INPUT_FILE='path/to/batch.xlsx'
+
+
